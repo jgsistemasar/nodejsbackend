@@ -58,38 +58,31 @@ const crear = async (req, res) => {
         });
         
     }
-
-
-
-
 };
-const listar = (req, res) => {
 
-    let consulta = Articulo.find({});
+const listar = async (req, res) => {
 
-    if (req.params.ultimos) {
-        consulta.limit(3);
-    }
+    try {
+    //Instanciar la busqueda    
+    let consulta = await Articulo.find({});
 
-    consulta.sort({ fecha: -1 })
-        .exec((error, articulos) => {
 
-            if (error || !articulos) {
-                return res.status(404).json({
-                    status: "error",
-                    mensaje: "No se han encontrado artículos!!"
-                });
-            }
-
-            return res.status(200).send({
-                status: "success",
-                contador: articulos.length,
-                articulos
-            });
-
+    return res.status(200).json({
+        status: "success",
+        consulta: consulta,
+        msg: "Aqui tiene el listado de articulos"
+    })
+        
+    } catch (error) {
+        return res.status(400).json({
+            status: "error",
+            msg: "No se pudieron obtener los articulos"
         });
+        
+    }
+};
 
-}
+
 const uno = (req, res) => {
     // Recoger un id por la url
     let id = req.params.id;
