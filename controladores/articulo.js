@@ -83,29 +83,29 @@ const listar = async (req, res) => {
 };
 
 
-const uno = (req, res) => {
+const uno = async (req, res) => {
+    try {
     // Recoger un id por la url
     let id = req.params.id;
 
-    // Buscar el articulo
-    Articulo.findById(id, (error, articulo) => {
+    //Buscar el articulo 
 
-        // Si no existe devolver error
-        if (error || !articulo) {
-            return res.status(404).json({
-                status: "error",
-                mensaje: "No se han encontrado el artículo"
-            });
-        }
-
-        // Devolver resultado
+    let resultado = await Articulo.findById(id);    
+    
+    // Devolver resultado
         return res.status(200).json({
             status: "success",
-            articulo
+            resultado
+        })
+        
+    } catch (error) {
+        return res.status(400).json({
+            status: "error",
+            msg: "No se pudo obtener el articulo"
         });
-
-    });
-}
+        
+    }
+};
 
 const borrar = (req, res) => {
 
